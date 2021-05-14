@@ -13,7 +13,7 @@ module ActionCable
             message_buffer.process!
             server.add_connection(self)
           rescue ActionCable::Connection::Authorization::UnauthorizedError
-            respond_to_invalid_request
+            close(reason: ActionCable::INTERNAL[:disconnect_reasons][:unauthorized], reconnect: false) if websocket.alive?
           end
         end
       end
